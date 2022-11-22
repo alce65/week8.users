@@ -1,6 +1,7 @@
+import createDebug from 'debug';
 import { Request, Response, NextFunction } from 'express';
 import { CustomError } from '../interfaces/error';
-
+const debug = createDebug('W8:middlewares:interceptors');
 export const errorManager = (
     error: CustomError,
     _req: Request,
@@ -8,12 +9,7 @@ export const errorManager = (
     _next: NextFunction
 ) => {
     _next;
-    console.log(
-        error.name,
-        error.statusCode,
-        error.statusMessage,
-        error.message
-    );
+    debug(error.name, error.statusCode, error.statusMessage, error.message);
     let status = error.statusCode || 500;
     if (error.name === 'ValidationError') {
         status = 406;

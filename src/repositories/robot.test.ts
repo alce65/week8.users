@@ -26,11 +26,11 @@ describe('Given ...', () => {
     });
 
     test('Then post ...', async () => {
-        const newCoffee = {
+        const newRobot = {
             name: 'BubuBot',
         };
-        const result = await repository.post(newCoffee);
-        expect(result.name).toEqual(newCoffee.name);
+        const result = await repository.post(newRobot);
+        expect(result.name).toEqual(newRobot.name);
     });
 
     test('Then delete ...', async () => {
