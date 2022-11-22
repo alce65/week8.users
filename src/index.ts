@@ -3,7 +3,7 @@ import { app } from './app.js';
 import createDebug from 'debug';
 
 import { CustomError } from './interfaces/error';
-import { dbConnect } from './db.conect.js';
+import { dbConnect } from './db.connect.js';
 const debug = createDebug('W8');
 
 const port = process.env.PORT || 3300;

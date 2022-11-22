@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { dbConnect } from '../db.conect';
+import { dbConnect } from '../db.connect';
 import { RobotRepository } from './robot';
 
 const mockData = [
