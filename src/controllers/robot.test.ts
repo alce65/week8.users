@@ -10,14 +10,14 @@ describe('Given RobotController', () => {
     const repository = new RobotRepository();
     const userRepo = new UserRepository();
 
-    const coffeeController = new RobotController(repository, userRepo);
+    const robotController = new RobotController(repository, userRepo);
     const req: Partial<Request> = {};
     const resp: Partial<Response> = {
         json: jest.fn(),
     };
     const next: NextFunction = jest.fn();
     test('Then ... getAll', async () => {
-        await coffeeController.getAll(req as Request, resp as Response, next);
+        await robotController.getAll(req as Request, resp as Response, next);
         expect(resp.json).toHaveBeenCalledWith({ robots: ['bot'] });
     });
 });
