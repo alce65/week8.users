@@ -10,7 +10,8 @@ export const getSecret = (secret = SECRET) => {
 };
 
 type TokenPayload = {
-    userName: string;
+    id: string;
+    name: string;
     role: string;
 };
 

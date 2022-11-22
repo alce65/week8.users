@@ -15,7 +15,8 @@ jest.mock('../config.js', () => ({
 }));
 
 const mock = {
-    userName: 'Pepe',
+    id: '1',
+    name: 'Pepe',
     role: '',
 };
 
@@ -43,7 +44,7 @@ describe('Given "readToken"', () => {
         const token = createToken(mock);
         test('Then', () => {
             const r = readToken(token);
-            expect(r.userName).toEqual(mock.userName);
+            expect(r.userName).toEqual(mock.name);
         });
     });
 

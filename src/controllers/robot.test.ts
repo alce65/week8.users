@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { RobotRepository } from '../repositories/robot';
+import { UserRepository } from '../repositories/user';
 import { RobotController } from './robot';
 
 jest.mock('../repositories/robot');
@@ -7,8 +8,9 @@ jest.mock('../repositories/robot');
 describe('Given RobotController', () => {
     RobotRepository.prototype.getAll = jest.fn().mockResolvedValue(['bot']);
     const repository = new RobotRepository();
+    const userRepo = new UserRepository();
 
-    const coffeeController = new RobotController(repository);
+    const coffeeController = new RobotController(repository, userRepo);
     const req: Partial<Request> = {};
     const resp: Partial<Response> = {
         json: jest.fn(),

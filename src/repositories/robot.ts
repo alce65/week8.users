@@ -8,6 +8,10 @@ export class RobotRepository implements Repo<Robot> {
 
     async getAll(): Promise<Array<Robot>> {
         return this.#Model.find();
+        //.populate('owner', {
+        //    name: 1,
+        //    id: 0,
+        //});
     }
     async get(id: id): Promise<Robot> {
         const result = await this.#Model.findById(id); //as Coffee;
