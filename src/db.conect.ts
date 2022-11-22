@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { USER, CLUSTER, PASSWD } from './config.js';
 
-export function dbConnect() {
+export async function dbConnect() {
     const DBName =
         process.env.NODE_ENV !== 'test' ? 'Coders2022' : 'CodersTesting';
     let uri = `mongodb+srv://${USER}:${PASSWD}`;
