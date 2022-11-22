@@ -1,9 +1,10 @@
+import createDebug from 'debug';
 import { Request, Response, NextFunction } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import { HTTPError } from '../interfaces/error.js';
 import { RobotRepository } from '../repositories/robot.js';
 import { readToken } from '../services/auth.js';
-
+const debug = createDebug('W8:middlewares:interceptors');
 export interface ExtraRequest extends Request {
     payload?: JwtPayload;
 }
@@ -13,6 +14,7 @@ export const logged = (
     res: Response,
     next: NextFunction
 ) => {
+    debug('logged');
     const authString = req.get('Authorization');
     if (!authString || !authString?.startsWith('Bearer')) {
         next(
@@ -41,11 +43,11 @@ export const who = async (
     res: Response,
     next: NextFunction
 ) => {
+    debug('who');
     const repo = new RobotRepository();
     try {
         const robot = await repo.get(req.params.id);
-        console.log(robot);
-        if (robot.owner.toString() !== (req.payload as JwtPayload).id) {
+        if (req.payload && robot.owner._id.toString() !== req.payload.id) {
             next(
                 new HTTPError(
                     403,
