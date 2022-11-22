@@ -16,6 +16,7 @@ jest.mock('../config.js', () => ({
 
 const mock = {
     userName: 'Pepe',
+    role: '',
 };
 
 describe('Given getSecret', () => {

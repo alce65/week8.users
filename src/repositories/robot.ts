@@ -18,7 +18,7 @@ export class RobotRepository implements Repo<Robot> {
     async find(search: {
         [key: string]: string | number | Date;
     }): Promise<Robot> {
-        console.log(search);
+        console.log({ search });
         const result = await this.#Model.findOne(search); //as Robot;
         if (!result) throw new Error('Not found id');
         return result as unknown as Robot;

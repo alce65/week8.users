@@ -21,7 +21,7 @@ export class UserRepository implements BasicRepo<User> {
     }
 
     async find(search: { [key: string]: string }): Promise<User> {
-        console.log(search);
+        console.log({ search });
         const result = await this.#Model.findOne(search); //as User;
         if (!result) throw new Error('Not found id');
         return result as unknown as User;

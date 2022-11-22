@@ -25,13 +25,14 @@ export class UserController {
 
     async login(req: Request, resp: Response, next: NextFunction) {
         try {
+            console.log(req.body); // {}
             const user = await this.repository.find({ name: req.body.name });
             const isPasswdValid = await passwdValidate(
                 req.body.passwd,
                 user.passwd
             );
             if (!isPasswdValid) throw new Error();
-            const token = createToken({ userName: user.name });
+            const token = createToken({ userName: user.name, role: user.role });
             resp.json({ token });
         } catch (error) {
             next(this.#createHttpError(error as Error));

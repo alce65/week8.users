@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "start": "cross-env DEBUG=W8 node dist/index.js",
-        "start:dev": "cross-env DEBUG=W8 PORT=7700 node --watch dist/index.js",
+        "start:dev": "cross-env DEBUG=W8 PORT=7700 nodemon dist/index.js",
         "build": "tsc",
         "build:dev": "tsc --watch",
         "test": "cross-env NODE_ENV=test jest --watchAll --coverage",
@@ -27,6 +27,7 @@
         "dotenv": "^16.0.3",
         "express": "^4.18.2",
         "jsonwebtoken": "^8.5.1",
+        "jwt-decode": "^3.1.2",
         "mongoose": "^6.7.2",
         "morgan": "^1.10.0",
         "npm-run-all": "^4.1.5",

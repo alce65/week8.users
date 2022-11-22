@@ -9,7 +9,12 @@ export const getSecret = (secret = SECRET) => {
     return secret;
 };
 
-export const createToken = (payload: { userName: string }) => {
+type TokenPayload = {
+    userName: string;
+    role: string;
+};
+
+export const createToken = (payload: TokenPayload) => {
     return jwt.sign(payload, getSecret());
 };
 
