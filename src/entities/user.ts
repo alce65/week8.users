@@ -15,7 +15,7 @@ export type User = {
     role: string;
 };
 
-export const userSchema = new Schema({
+export const userSchema = new Schema<User>({
     name: {
         type: String,
         required: true,
