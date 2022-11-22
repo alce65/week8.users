@@ -8,7 +8,7 @@ jest.mock('../repositories/robot');
 describe('Given RobotController', () => {
     RobotRepository.prototype.getAll = jest.fn().mockResolvedValue(['bot']);
     const repository = new RobotRepository();
-    const userRepo = new UserRepository();
+    const userRepo = UserRepository.getInstance();
 
     const robotController = new RobotController(repository, userRepo);
     const req: Partial<Request> = {};

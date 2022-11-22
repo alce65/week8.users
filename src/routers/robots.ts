@@ -7,7 +7,7 @@ import { UserRepository } from '../repositories/user.js';
 export const robotsRouter = Router();
 const controller = new RobotController(
     new RobotRepository(),
-    new UserRepository()
+    UserRepository.getInstance()
 );
 
 robotsRouter.get('/', controller.getAll.bind(controller));
