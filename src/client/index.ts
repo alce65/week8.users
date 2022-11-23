@@ -1,5 +1,6 @@
 import { getRobots, login } from './service.js';
-import jwt from '../../node_modules/jwt-decode/index';
+//import jwt_decode from '../../node_modules/jwt-decode/build/jwt-decode.esm.js';
+import jwt_decode from 'jwt-decode';
 
 (() => {
     document.addEventListener('DOMContentLoaded', () => {
@@ -34,8 +35,8 @@ import jwt from '../../node_modules/jwt-decode/index';
 
         // Actualización del estado
         if (loginData) {
-            // const decodeToken = jwt(JSON.parse(loginData).token); // {user: "Pepe", role: ''}
-            // console.log(decodeToken);
+            const decodeToken = jwt_decode(JSON.parse(loginData).token); // {user: "Pepe", role: ''}
+            console.log(decodeToken);
             token = JSON.parse(loginData).token;
             (form as HTMLFormElement).hidden = true;
             (section as HTMLElement).hidden = false;
