@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import createDebug from 'debug';
-import { Repo, BasicRepo } from '../repositories/repo.js';
+import { Repo } from '../repositories/repo.js';
 import { RobotI } from '../entities/robot.js';
 import { UserI } from '../entities/user.js';
 import { HTTPError } from '../interfaces/error.js';
@@ -9,8 +9,8 @@ const debug = createDebug('W8:controllers:robot');
 
 export class RobotController {
     constructor(
-        public repository: Repo<RobotI>,
-        public userRepo: BasicRepo<UserI>
+        public readonly repository: Repo<RobotI>,
+        public readonly userRepo: Repo<UserI>
     ) {
         debug('instance');
     }
@@ -49,7 +49,10 @@ export class RobotController {
             req.body.owner = user.id;
             const robot = await this.repository.post(req.body);
             // repo usuarios user + robot
-            // this.userRepo
+            user.robots.push(robot.id);
+            this.userRepo.patch(user.id.toString(), {
+                robots: user.robots,
+            });
 
             resp.status(201).json({ robot });
         } catch (error) {

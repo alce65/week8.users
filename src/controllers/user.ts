@@ -3,13 +3,13 @@ import { NextFunction, Request, Response } from 'express';
 import { RobotI } from '../entities/robot.js';
 import { UserI } from '../entities/user.js';
 import { HTTPError } from '../interfaces/error.js';
-import { BasicRepo, Repo } from '../repositories/repo.js';
+import { Repo } from '../repositories/repo.js';
 import { createToken, passwdValidate } from '../services/auth.js';
 const debug = createDebug('W8:controllers:user');
 
 export class UserController {
     constructor(
-        public readonly repository: BasicRepo<UserI>,
+        public readonly repository: Repo<UserI>,
         public readonly robotRepo: Repo<RobotI>
     ) {
         debug('instance');
