@@ -6,8 +6,11 @@ import { RobotController } from './robot';
 jest.mock('../repositories/robot');
 
 describe('Given RobotController', () => {
-    RobotRepository.prototype.getAll = jest.fn().mockResolvedValue(['bot']);
-    const repository = new RobotRepository();
+    const mockResponse = { robots: ['bot'] };
+    RobotRepository.prototype.getAll = jest
+        .fn()
+        .mockResolvedValue(mockResponse);
+    const repository = RobotRepository.getInstance();
     const userRepo = UserRepository.getInstance();
 
     const robotController = new RobotController(repository, userRepo);
@@ -18,6 +21,6 @@ describe('Given RobotController', () => {
     const next: NextFunction = jest.fn();
     test('Then ... getAll', async () => {
         await robotController.getAll(req as Request, resp as Response, next);
-        expect(resp.json).toHaveBeenCalledWith({ robots: ['bot'] });
+        expect(resp.json).toHaveBeenCalledWith(mockResponse);
     });
 });

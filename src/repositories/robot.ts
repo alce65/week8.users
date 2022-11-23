@@ -6,8 +6,18 @@ import { Repo, id } from './repo.js';
 const debug = createDebug('W8:repositories:robot');
 
 export class RobotRepository implements Repo<Robot> {
+    static instance: RobotRepository;
+
+    public static getInstance(): RobotRepository {
+        if (!RobotRepository.instance) {
+            RobotRepository.instance = new RobotRepository();
+        }
+        return RobotRepository.instance;
+    }
+
     #Model = model('Robot', robotSchema, 'robots');
-    constructor() {
+
+    private constructor() {
         debug('instance');
     }
 

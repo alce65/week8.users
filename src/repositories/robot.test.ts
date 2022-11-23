@@ -10,7 +10,7 @@ const mockData = [
 ];
 
 describe('Given ...', () => {
-    const repository = new RobotRepository();
+    const repository = RobotRepository.getInstance();
     let testIds: Array<string>;
     beforeAll(async () => {
         await dbConnect();

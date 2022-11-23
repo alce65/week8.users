@@ -7,7 +7,7 @@ export const usersRouter = Router();
 
 const controller = new UserController(
     UserRepository.getInstance(),
-    new RobotRepository()
+    RobotRepository.getInstance()
 );
 
 usersRouter.post('/register', controller.register.bind(controller));
