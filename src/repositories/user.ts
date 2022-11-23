@@ -34,7 +34,7 @@ export class UserRepository implements BasicRepo<UserI> {
         return result;
     }
 
-    async find(search: { [key: string]: string }): Promise<UserI> {
+    async find(search: Partial<UserI>): Promise<UserI> {
         debug('find', { search });
         const result = await this.#Model.findOne(search); //as User;
         if (!result) throw new Error('Not found id');

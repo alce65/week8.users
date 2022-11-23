@@ -8,7 +8,7 @@ export type id = number | string; //Types.ObjectId;
 export interface BasicRepo<T> {
     get: (id: id) => Promise<T>;
     post: (data: Partial<T>) => Promise<T>;
-    find: (data: any) => Promise<T>;
+    find: (data: Partial<T>) => Promise<T>;
 }
 
 export interface ExtraRepo<T> {

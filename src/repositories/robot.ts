@@ -36,15 +36,13 @@ export class RobotRepository implements Repo<RobotI> {
         return result;
     }
 
-    async find(search: {
-        [key: string]: string | number | Date;
-    }): Promise<RobotI> {
+    async find(search: Partial<RobotI>): Promise<RobotI> {
         debug('find', { search });
         const result = await this.#Model.findOne(search).populate('owner', {
             robots: 0,
         }); //as Robot;
         if (!result) throw new Error('Not found id');
-        return result as unknown as RobotI;
+        return result;
     }
 
     async post(data: ProtoRobotI): Promise<RobotI> {
