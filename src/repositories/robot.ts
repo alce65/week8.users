@@ -6,6 +6,7 @@ import { Repo, id } from './repo.js';
 const debug = createDebug('W8:repositories:robot');
 
 export class RobotRepository implements Repo<RobotI> {
+    //
     static instance: RobotRepository;
 
     public static getInstance(): RobotRepository {
@@ -23,9 +24,10 @@ export class RobotRepository implements Repo<RobotI> {
 
     async getAll(): Promise<Array<RobotI>> {
         debug('getAll');
-        return this.#Model.find().populate('owner', {
+        const result = this.#Model.find().populate('owner', {
             robots: 0,
         });
+        return result;
     }
     async get(id: id): Promise<RobotI> {
         debug('get', id);
@@ -79,19 +81,10 @@ export class RobotRepository implements Repo<RobotI> {
         return id;
     }
 
-    #disconnect() {
-        mongoose.disconnect();
-        debug(mongoose.connection.readyState);
-    }
-
     #generateDate(date: string | undefined) {
         if (!date) return new Date();
         const validDate =
             new Date(date) === new Date('') ? new Date() : new Date(date);
         return validDate;
-    }
-
-    getModel() {
-        return this.#Model;
     }
 }

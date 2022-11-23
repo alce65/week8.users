@@ -1,9 +1,9 @@
 import createDebug from 'debug';
 import { UserI, User } from '../entities/user.js';
 import { passwdEncrypt } from '../services/auth.js';
-import { BasicRepo, id } from './repo.js';
+import { Repo, id } from './repo.js';
 const debug = createDebug('W8:repositories:user');
-export class UserRepository implements BasicRepo<UserI> {
+export class UserRepository implements Repo<UserI> {
     static instance: UserRepository;
 
     public static getInstance(): UserRepository {
@@ -16,6 +16,12 @@ export class UserRepository implements BasicRepo<UserI> {
     #Model = User;
     private constructor() {
         debug('instance');
+    }
+
+    async getAll(): Promise<Array<UserI>> {
+        debug('getAll');
+        const result = this.#Model.find();
+        return result;
     }
 
     async get(id: id): Promise<UserI> {
@@ -39,5 +45,21 @@ export class UserRepository implements BasicRepo<UserI> {
         const result = await this.#Model.findOne(search); //as User;
         if (!result) throw new Error('Not found id');
         return result;
+    }
+
+    async patch(id: id, data: Partial<UserI>): Promise<UserI> {
+        debug('patch', id);
+        const result = await this.#Model.findByIdAndUpdate(id, data, {
+            new: true,
+        });
+        if (!result) throw new Error('Not found id');
+        return result;
+    }
+
+    async delete(id: id): Promise<id> {
+        debug('delete', id);
+        const result = await this.#Model.findByIdAndDelete(id);
+        if (result === null) throw new Error('Not found id');
+        return id;
     }
 }

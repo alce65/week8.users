@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { dbConnect } from '../db.connect';
+import { Robot } from '../entities/robot';
 import { RobotRepository } from './robot';
 
 const mockData = [{ name: 'PepeBot' }, { name: 'LuluBot' }];
@@ -9,9 +10,9 @@ describe('Given ...', () => {
     let testIds: Array<string>;
     beforeAll(async () => {
         await dbConnect();
-        await repository.getModel().deleteMany();
-        await repository.getModel().insertMany(mockData);
-        const data = await repository.getModel().find();
+        await Robot.deleteMany();
+        await Robot.insertMany(mockData);
+        const data = await Robot.find();
         testIds = [data[0].id, data[1].id];
         console.log(testIds);
     });
