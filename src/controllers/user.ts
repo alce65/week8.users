@@ -1,7 +1,7 @@
 import createDebug from 'debug';
 import { NextFunction, Request, Response } from 'express';
-import { Robot } from '../entities/robot.js';
-import { User } from '../entities/user.js';
+import { RobotI } from '../entities/robot.js';
+import { UserI } from '../entities/user.js';
 import { HTTPError } from '../interfaces/error.js';
 import { BasicRepo, Repo } from '../repositories/repo.js';
 import { createToken, passwdValidate } from '../services/auth.js';
@@ -9,8 +9,8 @@ const debug = createDebug('W8:controllers:user');
 
 export class UserController {
     constructor(
-        public readonly repository: BasicRepo<User>,
-        public readonly robotRepo: Repo<Robot>
+        public readonly repository: BasicRepo<UserI>,
+        public readonly robotRepo: Repo<RobotI>
     ) {
         debug('instance');
     }
@@ -19,7 +19,7 @@ export class UserController {
         try {
             debug('register');
             const user = await this.repository.post(req.body);
-            resp.json({ user });
+            resp.status(201).json({ user });
         } catch (error) {
             const httpError = new HTTPError(
                 503,
@@ -41,7 +41,7 @@ export class UserController {
             );
             if (!isPasswdValid) throw new Error();
             const token = createToken({
-                id: user.id,
+                id: user.id.toString(),
                 name: user.name,
                 role: user.role,
             });

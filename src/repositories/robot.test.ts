@@ -2,12 +2,7 @@ import mongoose from 'mongoose';
 import { dbConnect } from '../db.connect';
 import { RobotRepository } from './robot';
 
-const mockData = [
-    {
-        name: 'PepeBot',
-    },
-    { name: 'LuluBot' },
-];
+const mockData = [{ name: 'PepeBot' }, { name: 'LuluBot' }];
 
 describe('Given ...', () => {
     const repository = RobotRepository.getInstance();
@@ -18,6 +13,7 @@ describe('Given ...', () => {
         await repository.getModel().insertMany(mockData);
         const data = await repository.getModel().find();
         testIds = [data[0].id, data[1].id];
+        console.log(testIds);
     });
 
     test('Then getAll...', async () => {
@@ -25,13 +21,23 @@ describe('Given ...', () => {
         expect(result[0].name).toEqual(mockData[0].name);
     });
 
-    test('Then post ...', async () => {
+    test.todo('Then get with valid ID');
+
+    test.todo('Then get with invalid ID');
+
+    test('Then post with valid data', async () => {
         const newRobot = {
             name: 'BubuBot',
         };
         const result = await repository.post(newRobot);
         expect(result.name).toEqual(newRobot.name);
     });
+
+    test.todo('Then post with invalid data');
+
+    test.todo('Then update with valid ID');
+
+    test.todo('Then update with invalid ID');
 
     test('Then delete ...', async () => {
         const result = await repository.delete(testIds[0]);

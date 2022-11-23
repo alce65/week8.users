@@ -1,6 +1,6 @@
-import { Schema, Types } from 'mongoose';
+import { model, Schema, Types } from 'mongoose';
 
-export type ProtoUser = {
+export type ProtoUserI = {
     name?: string;
     email?: string;
     passwd?: string;
@@ -8,8 +8,8 @@ export type ProtoUser = {
     robots?: Array<Types.ObjectId>;
 };
 
-export type User = {
-    id: string;
+export type UserI = {
+    id: Types.ObjectId;
     name: string;
     email: string;
     passwd: string;
@@ -17,7 +17,7 @@ export type User = {
     robots: Array<Types.ObjectId>;
 };
 
-export const userSchema = new Schema<User>({
+export const userSchema = new Schema<UserI>({
     name: {
         type: String,
         required: true,
@@ -43,4 +43,4 @@ userSchema.set('toJSON', {
     },
 });
 
-// export const User = model<User>('User', userSchema, 'users');
+export const User = model<UserI>('User', userSchema, 'users');
