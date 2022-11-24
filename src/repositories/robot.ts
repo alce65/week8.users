@@ -1,5 +1,5 @@
 import createDebug from 'debug';
-import mongoose, { Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { RobotI, ProtoRobotI } from '../entities/robot.js';
 import { Robot } from '../entities/robot.js';
 import { Repo, id } from './repo.js';
@@ -77,14 +77,13 @@ export class RobotRepository implements Repo<RobotI> {
             .populate('owner', {
                 robots: 0,
             });
-        if (result === null) throw new Error('Not found id');
+        if (!result) throw new Error('Not found id');
         return id;
     }
 
     #generateDate(date: string | undefined) {
         if (!date) return new Date();
-        const validDate =
-            new Date(date) === new Date('') ? new Date() : new Date(date);
-        return validDate;
+        const d = new Date(date);
+        return isNaN(d.getTime()) ? new Date() : d;
     }
 }
