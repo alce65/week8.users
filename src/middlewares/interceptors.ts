@@ -54,7 +54,7 @@ export const who = async (
     const repo = RobotRepository.getInstance();
     try {
         const robot = await repo.get(req.params.id);
-        if (req.payload && robot.owner._id.toString() !== req.payload.id) {
+        if (!req.payload || robot.owner._id.toString() !== req.payload.id) {
             next(
                 new HTTPError(
                     403,
