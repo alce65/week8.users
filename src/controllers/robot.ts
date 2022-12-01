@@ -1,16 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
 import createDebug from 'debug';
 import { Repo } from '../repositories/repo.js';
-import { RobotI } from '../entities/robot.js';
-import { UserI } from '../entities/user.js';
+import { Robot } from '../entities/robot.js';
+import { User } from '../entities/user.js';
 import { HTTPError } from '../interfaces/error.js';
 import { ExtraRequest } from '../middlewares/interceptors.js';
 const debug = createDebug('W8:controllers:robot');
 
 export class RobotController {
     constructor(
-        public readonly repository: Repo<RobotI>,
-        public readonly userRepo: Repo<UserI>
+        public readonly repository: Repo<Robot>,
+        public readonly userRepo: Repo<User>
     ) {
         debug('instance');
     }

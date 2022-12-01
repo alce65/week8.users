@@ -1,5 +1,5 @@
-import { RobotI } from '../entities/robot';
-import { UserI } from '../entities/user';
+import { Robot } from '../entities/robot';
+import { User } from '../entities/user';
 
 export type id = number | string; //Types.ObjectId;
 

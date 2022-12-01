@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
 import { dbConnect } from '../db.connect';
-import { Robot } from '../entities/robot';
 import { RobotRepository } from './robot';
 
 describe('Given a singleton instance of the class "RobotRepository"', () => {
     const mockData = [{ name: 'PepeBot' }, { name: 'LuluBot' }];
+    const repository = RobotRepository.getInstance();
+    const Robot = repository.getModel();
+
     const setUpCollection = async () => {
         await dbConnect();
         await Robot.deleteMany();
@@ -12,8 +14,6 @@ describe('Given a singleton instance of the class "RobotRepository"', () => {
         const data = await Robot.find();
         return [data[0].id, data[1].id];
     };
-
-    const repository = RobotRepository.getInstance();
 
     const badFormattedId = '1';
     const invalidId = '537b422da27b69c98b1916e1';

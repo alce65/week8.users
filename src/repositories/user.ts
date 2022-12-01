@@ -1,9 +1,37 @@
 import createDebug from 'debug';
-import { UserI, User } from '../entities/user.js';
+import { model, Schema } from 'mongoose';
+import { User } from '../entities/user.js';
 import { passwdEncrypt } from '../services/auth.js';
 import { Repo, id } from './repo.js';
 const debug = createDebug('W8:repositories:user');
-export class UserRepository implements Repo<UserI> {
+
+export const userSchema = new Schema<User>({
+    name: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    email: String,
+    passwd: String,
+    role: String,
+    robots: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Robots',
+        },
+    ],
+});
+
+userSchema.set('toJSON', {
+    transform: (_document, returnedObject) => {
+        returnedObject.id = returnedObject._id;
+        delete returnedObject.__v;
+        delete returnedObject._id;
+        delete returnedObject.passwd;
+    },
+});
+
+export class UserRepository implements Repo<User> {
     static instance: UserRepository;
 
     public static getInstance(): UserRepository {
@@ -13,41 +41,41 @@ export class UserRepository implements Repo<UserI> {
         return UserRepository.instance;
     }
 
-    #Model = User;
+    #Model = model<User>('User', userSchema, 'users');
     private constructor() {
         debug('instance');
     }
 
-    async getAll(): Promise<Array<UserI>> {
+    async getAll(): Promise<Array<User>> {
         debug('getAll');
         const result = this.#Model.find();
         return result;
     }
 
-    async get(id: id): Promise<UserI> {
+    async get(id: id): Promise<User> {
         debug('get', id);
         const result = await this.#Model.findById(id); //as User;
         if (!result) throw new Error('Not found id');
         return result;
     }
 
-    async post(data: Partial<UserI>): Promise<UserI> {
-        // ESTO HACE REGISTER
+    async post({ ...data }: Partial<User>): Promise<User> {
         debug('post', data);
-        if (typeof data.passwd !== 'string') throw new Error('');
+        if (!data.passwd || typeof data.passwd !== 'string')
+            throw new Error('');
         data.passwd = await passwdEncrypt(data.passwd);
         const result = await this.#Model.create(data);
         return result;
     }
 
-    async find(search: Partial<UserI>): Promise<UserI> {
+    async find(search: Partial<User>): Promise<User> {
         debug('find', { search });
         const result = await this.#Model.findOne(search); //as User;
         if (!result) throw new Error('Not found id');
         return result;
     }
 
-    async patch(id: id, data: Partial<UserI>): Promise<UserI> {
+    async patch(id: id, data: Partial<User>): Promise<User> {
         debug('patch', id);
         const result = await this.#Model.findByIdAndUpdate(id, data, {
             new: true,
@@ -61,5 +89,9 @@ export class UserRepository implements Repo<UserI> {
         const result = await this.#Model.findByIdAndDelete(id);
         if (result === null) throw new Error('Not found id');
         return id;
+    }
+
+    getModel() {
+        return this.#Model;
     }
 }
