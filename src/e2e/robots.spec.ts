@@ -7,14 +7,17 @@ import request from 'supertest';
 import { app } from '../app';
 import { dbConnect } from '../db.connect';
 import { createToken, TokenPayload } from '../services/auth';
+import { RobotRepository } from '../repositories/robot';
+import { UserRepository } from '../repositories/user';
 import { User } from '../entities/user';
-import { Robot } from '../entities/robot';
 
 const setCollection = async () => {
-    const usersMock = [
+    const usersMock: Array<Partial<User>> = [
         { name: 'Pepe', email: 'pepe@acme.com', role: 'user' },
         { name: 'Ramon', email: 'ramon@acme.com', role: 'user' },
     ];
+    const User = UserRepository.getInstance().getModel();
+    const Robot = RobotRepository.getInstance().getModel();
     await User.deleteMany();
     await User.insertMany(usersMock);
     await Robot.deleteMany();
