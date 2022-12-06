@@ -36,8 +36,8 @@ SECRET=<`JWT Token generation`>
     -name: Testing coverage
         run: npm run test:prod #Change for a valid npm script
         env:
-          USER: ${{ secrets.USER }}
-          PASSWORD: ${{ secrets.PASSWORD }}
-          CLUSTER: ${{ secrets.CLUSTER }}
-          SECRET: ${{ secrets.SECRET }}
+            USER: ${{ secrets.USER }}
+            PASSWD: ${{ secrets.PASSWD }}
+            CLUSTER: ${{ secrets.CLUSTER }}
+            SECRET: ${{ secrets.SECRET }}
 ```
