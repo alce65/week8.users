@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { RobotRepository } from '../repositories/robot.js';
+import { RobotRepository } from '../repositories/robot.repo.js';
 import { RobotController } from '../controllers/robot.js';
-import { logged, who } from '../middlewares/interceptors.js';
-import { UserRepository } from '../repositories/user.js';
+import { logged, who } from '../interceptors/logged.js';
+import { UserRepository } from '../repositories/user.repo.js';
 
 export const robotsRouter = Router();
 const controller = new RobotController(

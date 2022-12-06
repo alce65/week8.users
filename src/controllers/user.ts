@@ -18,7 +18,7 @@ export class UserController {
     async register(req: Request, resp: Response, next: NextFunction) {
         try {
             debug('register');
-            const user = await this.repository.post(req.body);
+            const user = await this.repository.create(req.body);
             resp.status(201).json({ user });
         } catch (error) {
             const httpError = new HTTPError(
@@ -33,8 +33,7 @@ export class UserController {
     async login(req: Request, resp: Response, next: NextFunction) {
         try {
             debug('login', req.body.name);
-            const user = await this.repository.find({ name: req.body.name });
-            user.id;
+            const user = await this.repository.query({ name: req.body.name });
             const isPasswdValid = await passwdValidate(
                 req.body.passwd,
                 user.passwd

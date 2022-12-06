@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { User } from './user';
 
 export type ProtoRobot = {
     name?: string;
@@ -6,15 +6,15 @@ export type ProtoRobot = {
     speed?: number;
     resistance?: number;
     date?: string | Date;
-    owner?: Types.ObjectId;
+    owner?: User;
 };
 
 export type Robot = {
-    id: Types.ObjectId;
+    id: string;
     name: string;
     image: string;
     speed: number;
     resistance: number;
     date: Date;
-    owner: Types.ObjectId;
+    owner: User;
 };

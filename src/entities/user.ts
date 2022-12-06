@@ -1,18 +1,18 @@
-import { Types } from 'mongoose';
+import { Robot } from './robot';
 
 export type ProtoUser = {
     name?: string;
     email?: string;
     passwd?: string;
     role?: string;
-    robots?: Array<Types.ObjectId>;
+    robots?: Array<Robot>;
 };
 
 export type User = {
-    id: Types.ObjectId;
+    id: string;
     name: string;
     email: string;
     passwd: string;
     role: string;
-    robots: Array<Types.ObjectId>;
+    robots: Array<Robot>;
 };

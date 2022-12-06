@@ -4,7 +4,8 @@ import { Repo } from '../repositories/repo.js';
 import { Robot } from '../entities/robot.js';
 import { User } from '../entities/user.js';
 import { HTTPError } from '../interfaces/error.js';
-import { ExtraRequest } from '../middlewares/interceptors.js';
+import { ExtraRequest } from '../interfaces/extra.request.js';
+
 const debug = createDebug('W8:controllers:robot');
 
 export class RobotController {
@@ -17,14 +18,10 @@ export class RobotController {
     async getAll(req: Request, resp: Response, next: NextFunction) {
         try {
             debug('getAll');
-            const robots = await this.repository.getAll();
+            const robots = await this.repository.search();
             resp.json({ robots });
         } catch (error) {
-            const httpError = new HTTPError(
-                503,
-                'Service unavailable',
-                (error as Error).message
-            );
+            const httpError = this.#createHttpError(error as Error);
             next(httpError);
         }
     }
@@ -32,7 +29,7 @@ export class RobotController {
     async get(req: Request, resp: Response, next: NextFunction) {
         try {
             debug('get');
-            const robot = await this.repository.get(req.params.id);
+            const robot = await this.repository.queryId(req.params.id);
             resp.json({ robot });
         } catch (error) {
             next(this.#createHttpError(error as Error));
@@ -45,22 +42,18 @@ export class RobotController {
             if (!req.payload) {
                 throw new Error('Invalid payload');
             }
-            const user = await this.userRepo.get(req.payload.id);
+            const user = await this.userRepo.queryId(req.payload.id);
             req.body.owner = user.id;
-            const robot = await this.repository.post(req.body);
+            const robot = await this.repository.create(req.body);
+
             // repo usuarios user + robot
-            user.robots.push(robot.id);
-            this.userRepo.patch(user.id.toString(), {
+            user.robots.push(robot);
+            this.userRepo.update(user.id, {
                 robots: user.robots,
             });
-
             resp.status(201).json({ robot });
         } catch (error) {
-            const httpError = new HTTPError(
-                503,
-                'Service unavailable',
-                (error as Error).message
-            );
+            const httpError = this.#createHttpError(error as Error);
             next(httpError);
         }
     }
@@ -68,7 +61,7 @@ export class RobotController {
     async patch(req: Request, resp: Response, next: NextFunction) {
         try {
             debug('patch');
-            const robot = await this.repository.patch(req.params.id, req.body);
+            const robot = await this.repository.update(req.params.id, req.body);
             resp.json({ robot });
         } catch (error) {
             next(this.#createHttpError(error as Error));

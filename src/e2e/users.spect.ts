@@ -3,8 +3,7 @@ import request from 'supertest';
 import { app } from '../app';
 import { dbConnect } from '../db.connect';
 import { User } from '../entities/user';
-import { RobotRepository } from '../repositories/robot';
-import { UserRepository } from '../repositories/user';
+import { UserRepository } from '../repositories/user.repo';
 import { passwdEncrypt } from '../services/auth';
 
 const setCollection = async (name: string, passwd: string) => {
@@ -17,17 +16,12 @@ const setCollection = async (name: string, passwd: string) => {
         },
     ];
     const User = UserRepository.getInstance().getModel();
-    // const Robot = RobotRepository.getInstance().getModel();
     await User.deleteMany();
     await User.insertMany(usersMock);
-    // await Robot.deleteMany();
-    // const data = await User.find();
-    // const testIds = [data[0].id, data[1].id];
-    // return testIds;
 };
 
 describe(`Given an "app" with "/users" route 
-    and a valid connection to mongoDB'`, () => {
+    and a valid connection to mongoDB`, () => {
     const name = 'Ramon';
     const passwd = '54321';
     const mockNewUser: Partial<User> = {
@@ -36,16 +30,15 @@ describe(`Given an "app" with "/users" route
         passwd: '12345',
         role: 'admin',
     };
+    beforeEach(async () => {
+        await dbConnect();
+        await setCollection(name, passwd);
+    });
+
+    afterEach(async () => {
+        await mongoose.disconnect();
+    });
     describe('When I make a post to url /users/register', () => {
-        beforeEach(async () => {
-            await dbConnect();
-            await setCollection(name, passwd);
-        });
-
-        afterEach(async () => {
-            await mongoose.disconnect();
-        });
-
         test('Then if the data are valid, the api should sent status 201', async () => {
             const response = await request(app)
                 .post('/users/register')
@@ -68,14 +61,6 @@ describe(`Given an "app" with "/users" route
         });
     });
     describe('When I make a post to url /users/login', () => {
-        beforeEach(async () => {
-            await dbConnect();
-            await setCollection(name, passwd);
-        });
-
-        afterEach(async () => {
-            await mongoose.disconnect();
-        });
         test('Then if the data are valid, the api should sent status 200', async () => {
             const response = await request(app)
                 .post('/users/login')

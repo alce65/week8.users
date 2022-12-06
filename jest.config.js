@@ -4,5 +4,16 @@ export default {
     testEnvironment: 'node',
     testPathIgnorePatterns: ['dist'],
     resolver: 'jest-ts-webcompat-resolver',
-    coveragePathIgnorePatterns: ['src/entities'],
+    //collectCoverage: true,
+    collectCoverageFrom: ['src/**/*.ts'],
+    coveragePathIgnorePatterns: [
+        'index.ts',
+        'app.ts',
+        'e2e',
+        'client',
+        'routers',
+        'entities',
+        'repositories/user.model.ts',
+        'repositories/robot.model.ts',
+    ],
 };

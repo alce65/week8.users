@@ -1,35 +1,9 @@
 import createDebug from 'debug';
-import { model, Schema } from 'mongoose';
 import { User } from '../entities/user.js';
 import { passwdEncrypt } from '../services/auth.js';
 import { Repo, id } from './repo.js';
+import { UserModel } from './user.model.js';
 const debug = createDebug('W8:repositories:user');
-
-export const userSchema = new Schema<User>({
-    name: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    email: String,
-    passwd: String,
-    role: String,
-    robots: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Robots',
-        },
-    ],
-});
-
-userSchema.set('toJSON', {
-    transform: (_document, returnedObject) => {
-        returnedObject.id = returnedObject._id;
-        delete returnedObject.__v;
-        delete returnedObject._id;
-        delete returnedObject.passwd;
-    },
-});
 
 export class UserRepository implements Repo<User> {
     static instance: UserRepository;
@@ -41,25 +15,25 @@ export class UserRepository implements Repo<User> {
         return UserRepository.instance;
     }
 
-    #Model = model<User>('User', userSchema, 'users');
+    #Model = UserModel;
     private constructor() {
         debug('instance');
     }
 
-    async getAll(): Promise<Array<User>> {
+    async search(): Promise<Array<User>> {
         debug('getAll');
         const result = this.#Model.find();
         return result;
     }
 
-    async get(id: id): Promise<User> {
+    async queryId(id: id): Promise<User> {
         debug('get', id);
         const result = await this.#Model.findById(id); //as User;
         if (!result) throw new Error('Not found id');
         return result;
     }
 
-    async post({ ...data }: Partial<User>): Promise<User> {
+    async create({ ...data }: Partial<User>): Promise<User> {
         debug('post', data);
         if (!data.passwd || typeof data.passwd !== 'string')
             throw new Error('');
@@ -68,14 +42,14 @@ export class UserRepository implements Repo<User> {
         return result;
     }
 
-    async find(search: Partial<User>): Promise<User> {
-        debug('find', { search });
-        const result = await this.#Model.findOne(search); //as User;
+    async query(query: Partial<User>): Promise<User> {
+        debug('find', { search: query });
+        const result = await this.#Model.findOne(query); //as User;
         if (!result) throw new Error('Not found id');
         return result;
     }
 
-    async patch(id: id, data: Partial<User>): Promise<User> {
+    async update(id: id, data: Partial<User>): Promise<User> {
         debug('patch', id);
         const result = await this.#Model.findByIdAndUpdate(id, data, {
             new: true,
@@ -87,8 +61,12 @@ export class UserRepository implements Repo<User> {
     async delete(id: id): Promise<id> {
         debug('delete', id);
         const result = await this.#Model.findByIdAndDelete(id);
-        if (result === null) throw new Error('Not found id');
-        return id;
+        // Cuando el ID es valido pero NO se encuentra
+        // la query (like-promise) de findByIdAndDelete
+        // NO se resuelve a undefined / null
+        // En su lugar se lanza un PoolClosedError
+        // if (result === null) throw new Error('Not found id');
+        return (result as User).id;
     }
 
     getModel() {
