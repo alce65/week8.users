@@ -77,8 +77,9 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
     describe('When it has been run post and it has called Model.create', () => {
         const spyModel = jest.spyOn(User, 'create');
         test('Then, if the data has been valid, it should be returned the new user', async () => {
-            const newUser = { name: 'NewUser', passwd: '12345' };
-            (passwdEncrypt as jest.Mock).mockResolvedValue('12345');
+            const mockEncryptPwd = '12345';
+            const newUser = { name: 'NewUser', passwd: mockEncryptPwd };
+            (passwdEncrypt as jest.Mock).mockResolvedValue(mockEncryptPwd);
             const result = await repository.create(newUser);
             expect(spyModel).toHaveBeenCalled();
             expect(passwdEncrypt).toHaveBeenCalled();
@@ -93,7 +94,8 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
         });
 
         test('Then, if the data has NOT name, it should be thrown a Validation error', () => {
-            const newUser = { passwd: '12345' };
+            const mockEncryptPwd = '12345';
+            const newUser = { passwd: mockEncryptPwd };
             (passwdEncrypt as jest.Mock).mockResolvedValue('12345');
             expect(async () => {
                 await repository.create(newUser);

@@ -24,10 +24,11 @@ describe(`Given an "app" with "/users" route
     and a valid connection to mongoDB`, () => {
     const name = 'Ramon';
     const mockPwd = '54321';
+    const mockEncryptPwd = '12345';
     const mockNewUser: Partial<User> = {
         name: 'Pepe',
         email: 'pepe@sample.com',
-        passwd: '12345',
+        passwd: mockEncryptPwd,
         role: 'admin',
     };
     beforeEach(async () => {
@@ -80,9 +81,10 @@ describe(`Given an "app" with "/users" route
             expect(response.status).toBe(503);
         });
         test('Then if the passwd are not valid, the api should sent status 503', async () => {
+            const mockEncryptPwd = '00000';
             const response = await request(app)
                 .post('/users/login')
-                .send({ name, passwd: '00000' });
+                .send({ name, passwd: mockEncryptPwd });
             expect(response.status).toBe(503);
         });
     });
