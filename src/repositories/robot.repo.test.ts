@@ -9,9 +9,9 @@ describe('Given a singleton instance of the class "RobotRepository"', () => {
 
     const setUpCollection = async () => {
         await dbConnect();
-        await Robot.deleteMany();
+        await Robot.deleteMany().exec();
         await Robot.insertMany(mockData);
-        const data = await Robot.find();
+        const data = await Robot.find().exec();
         return [data[0].id, data[1].id];
     };
 

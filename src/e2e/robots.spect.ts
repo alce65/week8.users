@@ -18,10 +18,10 @@ const setCollection = async () => {
     ];
     const User = UserRepository.getInstance().getModel();
     const Robot = RobotRepository.getInstance().getModel();
-    await User.deleteMany();
+    await User.deleteMany().exec();
     await User.insertMany(usersMock);
-    await Robot.deleteMany();
-    const data = await User.find();
+    await Robot.deleteMany().exec();
+    const data = await User.find().exec();
     const testIds = [data[0].id, data[1].id];
     return testIds;
 };

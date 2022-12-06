@@ -22,13 +22,13 @@ export class UserRepository implements Repo<User> {
 
     async search(): Promise<Array<User>> {
         debug('getAll');
-        const result = this.#Model.find();
+        const result = this.#Model.find().exec();
         return result;
     }
 
     async queryId(id: id): Promise<User> {
         debug('get', id);
-        const result = await this.#Model.findById(id); //as User;
+        const result = await this.#Model.findById(id).exec(); //as User;
         if (!result) throw new Error('Not found id');
         return result;
     }
@@ -44,7 +44,7 @@ export class UserRepository implements Repo<User> {
 
     async query(query: Partial<User>): Promise<User> {
         debug('find', { search: query });
-        const result = await this.#Model.findOne(query); //as User;
+        const result = await this.#Model.findOne(query).exec(); //as User;
         if (!result) throw new Error('Not found id');
         return result;
     }

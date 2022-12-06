@@ -12,9 +12,9 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
 
     const setUpCollection = async () => {
         await dbConnect();
-        await User.deleteMany();
+        await User.deleteMany().exec();
         await User.insertMany(mockData);
-        const data = await User.find();
+        const data = await User.find().exec();
         return [data[0].id, data[1].id];
     };
 

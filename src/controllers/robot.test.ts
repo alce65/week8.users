@@ -5,8 +5,6 @@ import { RobotRepository } from '../repositories/robot.repo';
 import { UserRepository } from '../repositories/user.repo';
 import { RobotController } from './robot';
 
-// jest.mock('../repositories/robot');
-
 describe('Given RobotController', () => {
     // Instancias de los repositorios y mock de sus funciones
     const repository = RobotRepository.getInstance();

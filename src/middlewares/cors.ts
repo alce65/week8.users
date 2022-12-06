@@ -5,6 +5,6 @@ export const setCors = (req: Request, res: Response, next: NextFunction) => {
     // para evitas un Security HotSpot
 
     const origin = req.header('Origin') || '*';
-    res.setHeader('Access-Control-Allow-Origin', origin as string);
+    res.setHeader('Access-Control-Allow-Origin', origin);
     next();
 };

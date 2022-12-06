@@ -16,14 +16,14 @@ const setCollection = async (name: string, passwd: string) => {
         },
     ];
     const User = UserRepository.getInstance().getModel();
-    await User.deleteMany();
+    await User.deleteMany().exec();
     await User.insertMany(usersMock);
 };
 
 describe(`Given an "app" with "/users" route 
     and a valid connection to mongoDB`, () => {
     const name = 'Ramon';
-    const passwd = '54321';
+    const mockPwd = '54321';
     const mockNewUser: Partial<User> = {
         name: 'Pepe',
         email: 'pepe@sample.com',
@@ -32,7 +32,7 @@ describe(`Given an "app" with "/users" route
     };
     beforeEach(async () => {
         await dbConnect();
-        await setCollection(name, passwd);
+        await setCollection(name, mockPwd);
     });
 
     afterEach(async () => {
@@ -64,13 +64,13 @@ describe(`Given an "app" with "/users" route
         test('Then if the data are valid, the api should sent status 200', async () => {
             const response = await request(app)
                 .post('/users/login')
-                .send({ name, passwd });
+                .send({ name, passwd: mockPwd });
             expect(response.status).toBe(200);
         });
         test('Then if there are not user, the api should sent status 404', async () => {
             const response = await request(app)
                 .post('/users/login')
-                .send({ passwd });
+                .send({ passwd: mockPwd });
             expect(response.status).toBe(404);
         });
         test('Then if there are not passwd, the api should sent status 503', async () => {

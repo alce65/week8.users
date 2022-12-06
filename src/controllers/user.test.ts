@@ -12,11 +12,8 @@ describe('Given UserController', () => {
     // Instancias de los repositorios y mock de sus funciones
     const repository = UserRepository.getInstance();
     const roboRepo = RobotRepository.getInstance();
-    //repository.search = jest.fn();
     repository.query = jest.fn();
     repository.create = jest.fn();
-    //repository.update = jest.fn();
-    //repository.delete = jest.fn();
     // Instancia del controller inyectándole los mock-repos
     const userController = new UserController(repository, roboRepo);
     // Mock de los objetos/funciones de Express: req, resp, next
