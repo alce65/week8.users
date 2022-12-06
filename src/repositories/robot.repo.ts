@@ -23,23 +23,29 @@ export class RobotRepository implements Repo<Robot> {
 
     async search(): Promise<Array<Robot>> {
         debug('getAll');
-        const result = this.#Model.find().populate('owner', {
-            robots: 0,
-        });
+        const result = this.#Model
+            .find()
+            .populate('owner', {
+                robots: 0,
+            })
+            .exec();
         return result;
     }
     async queryId(id: id): Promise<Robot> {
         debug('get', id);
-        const result = await this.#Model.findById(id).populate('owner');
+        const result = await this.#Model.findById(id).populate('owner').exec();
         if (!result) throw new Error('Not found id');
         return result;
     }
 
     async query(query: Partial<Robot>): Promise<Robot> {
         debug('find', { search: query });
-        const result = await this.#Model.findOne(query).populate('owner', {
-            robots: 0,
-        }); //as Robot;
+        const result = await this.#Model
+            .findOne(query)
+            .populate('owner', {
+                robots: 0,
+            })
+            .exec(); //as Robot;
         // Cuando el ID es valido pero no se encuentra
         // la query (like-promise) de findOne se resuelve a undefined / null
         if (!result) throw new Error('Not found id');
@@ -62,7 +68,8 @@ export class RobotRepository implements Repo<Robot> {
             .findByIdAndUpdate(id, data, { new: true })
             .populate('owner', {
                 robots: 0,
-            });
+            })
+            .exec();
         // Cuando el ID es valido pero no se encuentra
         // la query (like-promise) de findByIdAndUpdate
         // se resuelve a undefined / null
@@ -76,7 +83,8 @@ export class RobotRepository implements Repo<Robot> {
             .findByIdAndDelete(id)
             .populate('owner', {
                 robots: 0,
-            });
+            })
+            .exec();
         // Cuando el ID es valido pero NO se encuentra
         // la query (like-promise) de findByIdAndDelete
         // NO se resuelve a undefined / null

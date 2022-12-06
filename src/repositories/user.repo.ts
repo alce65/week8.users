@@ -51,16 +51,18 @@ export class UserRepository implements Repo<User> {
 
     async update(id: id, data: Partial<User>): Promise<User> {
         debug('patch', id);
-        const result = await this.#Model.findByIdAndUpdate(id, data, {
-            new: true,
-        });
+        const result = await this.#Model
+            .findByIdAndUpdate(id, data, {
+                new: true,
+            })
+            .exec();
         if (!result) throw new Error('Not found id');
         return result;
     }
 
     async delete(id: id): Promise<id> {
         debug('delete', id);
-        const result = await this.#Model.findByIdAndDelete(id);
+        const result = await this.#Model.findByIdAndDelete(id).exec();
         // Cuando el ID es valido pero NO se encuentra
         // la query (like-promise) de findByIdAndDelete
         // NO se resuelve a undefined / null
