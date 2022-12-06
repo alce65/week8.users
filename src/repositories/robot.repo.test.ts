@@ -25,18 +25,18 @@ describe('Given a singleton instance of the class "RobotRepository"', () => {
     });
     describe('When it has been run getAll and it has called Model.find', () => {
         test('Then it returns the robots in the collection', async () => {
-            const spyModel = jest.spyOn(Robot, 'find');
+            const spyRobotModel = jest.spyOn(Robot, 'find');
             const result = await repository.search();
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyRobotModel).toHaveBeenCalled();
             expect(result[0].name).toEqual(mockData[0].name);
         });
     });
 
     describe('When it has been run get and it has called Model.findById', () => {
-        const spyModel = jest.spyOn(Robot, 'findById');
+        const spyRobotModel = jest.spyOn(Robot, 'findById');
         test('Then, if the ID has been valid, it should be returned the robot', async () => {
             const result = await repository.queryId(testIds[0]);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyRobotModel).toHaveBeenCalled();
             expect(result.name).toEqual(mockData[0].name);
         });
 
@@ -44,22 +44,22 @@ describe('Given a singleton instance of the class "RobotRepository"', () => {
             expect(async () => {
                 await repository.queryId(badFormattedId);
             }).rejects.toThrowError(mongoose.Error.CastError);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyRobotModel).toHaveBeenCalled();
         });
 
         test('Then, if the ID has been invalid, it should be thrown a Validation error', async () => {
             expect(async () => {
                 await repository.queryId(invalidId);
             }).rejects.toThrowError(mongoose.MongooseError);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyRobotModel).toHaveBeenCalled();
         });
     });
 
     describe('When it has been run find and it has called Model.findOne', () => {
-        const spyModel = jest.spyOn(Robot, 'findOne');
+        const spyRobotModel = jest.spyOn(Robot, 'findOne');
         test('Then, if the data has been valid, it should be returned the found robot ', async () => {
             const result = await repository.query(mockData[0]);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyRobotModel).toHaveBeenCalled();
             expect(result.name).toEqual(mockData[0].name);
         });
 
@@ -67,28 +67,28 @@ describe('Given a singleton instance of the class "RobotRepository"', () => {
             expect(async () => {
                 await repository.query({ name: 'NoBot' });
             }).rejects.toThrowError(mongoose.MongooseError);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyRobotModel).toHaveBeenCalled();
         });
     });
 
     describe('When it has been run post and it has called Model.create', () => {
-        const spyModel = jest.spyOn(Robot, 'create');
+        const spyRobotModel = jest.spyOn(Robot, 'create');
         test('Then, if the data has been valid, it should be returned the new robot', async () => {
             const newRobot = { name: 'OldBot', date: '2020-1-12Z' };
             const result = await repository.create(newRobot);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyRobotModel).toHaveBeenCalled();
             expect(result.name).toEqual(newRobot.name);
         });
         test('Then, if the data has been valid but without date, it should be returned the new robot', async () => {
             const newRobot = { name: 'BigBot' };
             const result = await repository.create(newRobot);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyRobotModel).toHaveBeenCalled();
             expect(result.name).toEqual(newRobot.name);
         });
         test('Then, if the data has been valid but with invalid date, it should be returned the new robot', async () => {
             const newRobot = { name: 'SimpleBot', date: 'Enero' };
             const result = await repository.create(newRobot);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyRobotModel).toHaveBeenCalled();
             expect(result.name).toEqual(newRobot.name);
         });
 
@@ -97,35 +97,35 @@ describe('Given a singleton instance of the class "RobotRepository"', () => {
             expect(async () => {
                 await repository.create(newRobot);
             }).rejects.toThrowError(mongoose.Error.ValidationError);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyRobotModel).toHaveBeenCalled();
         });
     });
 
     describe('When it has been run patch and it has called Model.findByIdAndUpdate', () => {
-        const spyModel = jest.spyOn(Robot, 'findByIdAndUpdate');
+        const spyRobotModel = jest.spyOn(Robot, 'findByIdAndUpdate');
         test('Then, if the ID has been valid, it should be returned the updated robot', async () => {
-            const updateName = 'MyBot';
+            const updateRobotName = 'MyBot';
             const result = await repository.update(testIds[0], {
-                name: updateName,
+                name: updateRobotName,
             });
-            expect(spyModel).toHaveBeenCalled();
-            expect(result.name).toEqual(updateName);
+            expect(spyRobotModel).toHaveBeenCalled();
+            expect(result.name).toEqual(updateRobotName);
         });
 
         test('Then, if the ID has been invalid, it should be thrown an error', async () => {
-            const updateName = 'MyBot';
+            const updateRobotName = 'MyBot';
             expect(async () => {
-                await repository.update(invalidId, { name: updateName });
+                await repository.update(invalidId, { name: updateRobotName });
             }).rejects.toThrowError(mongoose.MongooseError);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyRobotModel).toHaveBeenCalled();
         });
     });
 
     describe('When it has been run delete and it has called Model.findByIdAndDelete', () => {
-        const spyModel = jest.spyOn(Robot, 'findByIdAndDelete');
+        const spyRobotModel = jest.spyOn(Robot, 'findByIdAndDelete');
         test('Then, if the ID has been valid, it should be returned the deleted robot', async () => {
             const result = await repository.delete(testIds[0]);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyRobotModel).toHaveBeenCalled();
             expect(result).toEqual(testIds[0]);
         });
 
@@ -133,14 +133,14 @@ describe('Given a singleton instance of the class "RobotRepository"', () => {
             expect(async () => {
                 await repository.delete(badFormattedId);
             }).rejects.toThrowError(mongoose.Error.CastError);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyRobotModel).toHaveBeenCalled();
         });
 
         test('Then if the ID has been invalid, it should be thrown an error', async () => {
             expect(async () => {
                 await repository.delete(invalidId);
             }).rejects.toThrowError(mongoose.MongooseError);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyRobotModel).toHaveBeenCalled();
         });
     });
 

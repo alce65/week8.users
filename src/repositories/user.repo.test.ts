@@ -28,18 +28,18 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
     });
     describe('When it has been run getAll and it has called Model.find', () => {
         test('Then it returns the users in the collection', async () => {
-            const spyModel = jest.spyOn(User, 'find');
+            const spyUserModel = jest.spyOn(User, 'find');
             const result = await repository.search();
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyUserModel).toHaveBeenCalled();
             expect(result[0].name).toEqual(mockData[0].name);
         });
     });
 
     describe('When it has been run get and it has called Model.findById', () => {
-        const spyModel = jest.spyOn(User, 'findById');
+        const spyUserModel = jest.spyOn(User, 'findById');
         test('Then, if the ID has been valid, it should be returned the user', async () => {
             const result = await repository.queryId(testIds[0]);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyUserModel).toHaveBeenCalled();
             expect(result.name).toEqual(mockData[0].name);
         });
 
@@ -47,22 +47,22 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
             expect(async () => {
                 await repository.queryId(badFormattedId);
             }).rejects.toThrowError(mongoose.Error.CastError);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyUserModel).toHaveBeenCalled();
         });
 
         test('Then, if the ID has been invalid, it should be thrown a Validation error', async () => {
             expect(async () => {
                 await repository.queryId(invalidId);
             }).rejects.toThrowError(mongoose.MongooseError);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyUserModel).toHaveBeenCalled();
         });
     });
 
     describe('When it has been run find and it has called Model.findOne', () => {
-        const spyModel = jest.spyOn(User, 'findOne');
+        const spyUserModel = jest.spyOn(User, 'findOne');
         test('Then, if the data has been valid, it should be returned the found user ', async () => {
             const result = await repository.query(mockData[0]);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyUserModel).toHaveBeenCalled();
             expect(result.name).toEqual(mockData[0].name);
         });
 
@@ -70,18 +70,18 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
             expect(async () => {
                 await repository.query({ name: 'NoUser' });
             }).rejects.toThrowError(mongoose.MongooseError);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyUserModel).toHaveBeenCalled();
         });
     });
 
     describe('When it has been run post and it has called Model.create', () => {
-        const spyModel = jest.spyOn(User, 'create');
+        const spyUserModel = jest.spyOn(User, 'create');
         test('Then, if the data has been valid, it should be returned the new user', async () => {
             const mockEncryptPwd = '12345';
             const newUser = { name: 'NewUser', passwd: mockEncryptPwd };
             (passwdEncrypt as jest.Mock).mockResolvedValue(mockEncryptPwd);
             const result = await repository.create(newUser);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyUserModel).toHaveBeenCalled();
             expect(passwdEncrypt).toHaveBeenCalled();
             expect(result.name).toEqual(newUser.name);
         });
@@ -104,30 +104,30 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
     });
 
     describe('When it has been run patch and it has called Model.findByIdAndUpdate', () => {
-        const spyModel = jest.spyOn(User, 'findByIdAndUpdate');
+        const spyUserModel = jest.spyOn(User, 'findByIdAndUpdate');
         test('Then, if the ID has been valid, it should be returned the updated user', async () => {
-            const updateName = 'Ernesto';
+            const updateUserName = 'Ernesto';
             const result = await repository.update(testIds[0], {
-                name: updateName,
+                name: updateUserName,
             });
-            expect(spyModel).toHaveBeenCalled();
-            expect(result.name).toEqual(updateName);
+            expect(spyUserModel).toHaveBeenCalled();
+            expect(result.name).toEqual(updateUserName);
         });
 
         test('Then, if the ID has been invalid, it should be thrown an error', async () => {
-            const updateName = 'Ernesto';
+            const updateUserName = 'Ernesto';
             expect(async () => {
-                await repository.update(invalidId, { name: updateName });
+                await repository.update(invalidId, { name: updateUserName });
             }).rejects.toThrowError(mongoose.MongooseError);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyUserModel).toHaveBeenCalled();
         });
     });
 
     describe('When it has been run delete and it has called Model.findByIdAndDelete', () => {
-        const spyModel = jest.spyOn(User, 'findByIdAndDelete');
+        const spyUserModel = jest.spyOn(User, 'findByIdAndDelete');
         test('Then, if the ID has been valid, it should be returned the deleted user', async () => {
             const result = await repository.delete(testIds[0]);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyUserModel).toHaveBeenCalled();
             expect(result).toEqual(testIds[0]);
         });
 
@@ -135,14 +135,14 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
             expect(async () => {
                 await repository.delete(badFormattedId);
             }).rejects.toThrowError(mongoose.Error.CastError);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyUserModel).toHaveBeenCalled();
         });
 
         test('Then if the ID has been invalid, it should be thrown an error', async () => {
             expect(async () => {
                 await repository.delete(invalidId);
             }).rejects.toThrowError(mongoose.MongooseError);
-            expect(spyModel).toHaveBeenCalled();
+            expect(spyUserModel).toHaveBeenCalled();
         });
     });
 
