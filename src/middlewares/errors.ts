@@ -6,9 +6,9 @@ export const errorManager = (
     error: CustomError,
     _req: Request,
     resp: Response,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _next: NextFunction
 ) => {
-    _next;
     debug(error.name, error.statusCode, error.statusMessage, error.message);
     let status = error.statusCode || 500;
     if (error.name === 'ValidationError') {
@@ -19,5 +19,5 @@ export const errorManager = (
         type: error.name,
         error: error.message,
     };
-    resp.status(status).json(result).end();
+    resp.status(status).json(result);
 };
